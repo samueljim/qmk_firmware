@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // Add headers for raw hid communication
-#include "raw_hid.h"
+// #include "raw_hid.h"
 
 bool is_alt_tab_active = false;
 uint16_t alt_tab_timer = 0;
@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        _______, _______, _______, _______, KC_ENT,       _______, _______, _______, _______, _______\
 ),
 /* RAISE
- * ,----------------------------------------.                    ,-----------------------------------------.
+ * ,----------------------------------------.                     ,-----------------------------------------.
  * | Undo |      |      |      |      |      |                    |      |      |      |      |      |  =   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  | Ins  | Pscr | Menu |      |      |                    |      | PWrd |  Up  | NWrd | DLine| Bspc |
@@ -99,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |shutdo|      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |shutdo|      |      |      |      |      |                      |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | RESET|      |QWERTY|      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -460,7 +460,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef ENCODER_ENABLE
 
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
      switch (get_highest_layer(layer_state)) {
         case _LOWER:
             if (index == 0) {
@@ -497,6 +497,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 }
             }
     }
+    return true;
 }
 
 #endif
