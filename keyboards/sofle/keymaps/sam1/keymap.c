@@ -4,10 +4,10 @@
 // Add headers for raw hid communication
 // #include "raw_hid.h"
 
-bool is_alt_tab_active = false;
-uint16_t alt_tab_timer = 0;
+// bool is_alt_tab_active = false;
+// uint16_t alt_tab_timer = 0;
 
-char wpm_str[20];
+char wpm_str[10];
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
@@ -240,46 +240,46 @@ static void render_anim(void) {
         }
     }
 }
-static void print_status_narrow(void) {
-    // Print current mode
-    oled_write_P(PSTR("\n"), false);
-    oled_write_ln_P(PSTR("SAM"), true);
-    oled_write_ln_P(PSTR(""), false);
-    if (keymap_config.swap_lctl_lgui) {
-        oled_write_ln_P(PSTR("MAC"), false);
-    } else {
-        oled_write_ln_P(PSTR("WIN"), false);
-    }
+// static void print_status_narrow(void) {
+//     // Print current mode
+//     oled_write_P(PSTR("\n"), false);
+//     oled_write_ln_P(PSTR("SAM"), true);
+//     oled_write_ln_P(PSTR(""), false);
+//     if (keymap_config.swap_lctl_lgui) {
+//         oled_write_ln_P(PSTR("MAC"), false);
+//     } else {
+//         oled_write_ln_P(PSTR("WIN"), false);
+//     }
 
-    // switch (get_highest_layer(default_layer_state)) {
-    //     case _QWERTY:
-    //         oled_write_ln_P(PSTR("Qwrt"), false);
-    //         break;
+//     // switch (get_highest_layer(default_layer_state)) {
+//     //     case _QWERTY:
+//     //         oled_write_ln_P(PSTR("Qwrt"), false);
+//     //         break;
 
-    //     default:
-    //         oled_write_P(PSTR("Undef"), false);
-    // }
-    oled_write_P(PSTR("\n\n"), false);
-    // Print current layer
-    oled_write_ln_P(PSTR("LAYER"), false);
-    switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-            oled_write_P(PSTR("Base\n"), false);
-            break;
-        case _RAISE:
-            oled_write_P(PSTR("Raise"), false);
-            break;
-        case _LOWER:
-            oled_write_P(PSTR("Lower"), false);
-            break;
-        case _ADJUST:
-            oled_write_P(PSTR("Adj\n"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("Undef"), false);
-    }
-    oled_write_P(PSTR("\n\n"), false);
-}
+//     //     default:
+//     //         oled_write_P(PSTR("Undef"), false);
+//     // }
+//     oled_write_P(PSTR("\n\n"), false);
+//     // Print current layer
+//     oled_write_ln_P(PSTR("LAYER"), false);
+//     switch (get_highest_layer(layer_state)) {
+//         case _QWERTY:
+//             oled_write_P(PSTR("Base\n"), false);
+//             break;
+//         case _RAISE:
+//             oled_write_P(PSTR("Raise"), false);
+//             break;
+//         case _LOWER:
+//             oled_write_P(PSTR("Lower"), false);
+//             break;
+//         case _ADJUST:
+//             oled_write_P(PSTR("Adj\n"), false);
+//             break;
+//         default:
+//             oled_write_ln_P(PSTR("Undef"), false);
+//     }
+//     oled_write_P(PSTR("\n\n"), false);
+// }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
@@ -295,7 +295,7 @@ void oled_task_user(void) {
         sprintf(wpm_str, "WPM: %03d", get_current_wpm());
         oled_write(wpm_str, false);
     } else {
-        print_status_narrow();
+        // print_status_narrow();
 
     }
 }
@@ -491,9 +491,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 }
             } else if (index == 0) {
                 if (clockwise) {
-                    tap_code(KC_PGUP);
+                    tap_code(KC_MS_WH_UP);
                 } else {
-                    tap_code(KC_PGDOWN);
+                    tap_code(KC_MS_WH_DOWN);
                 }
             }
     }
