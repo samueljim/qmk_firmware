@@ -1,4 +1,5 @@
 SRC += qmk_rc.c
+AUTO_SHIFT_ENABLE = yes
 OLED_DRIVER_ENABLE = yes
 ENCODER_ENABLE = yes
 CONSOLE_ENABLE = yes
