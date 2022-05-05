@@ -34,15 +34,11 @@ void qmk_rc_process_command_quantum(qmk_rc_command_t* command) {
   switch (command->id) {
 #ifdef OLED_DRIVER_ENABLE
     case OLED_WRITE: {
-        if (is_keyboard_master()) {
-          oled_write((const char*) command->data, false);
-        }
+        oled_write((const char*) command->data, false);
       break;
     }
     case OLED_CLEAR: {
-        if (is_keyboard_master()) {
-            oled_clear();
-        }
+        oled_clear();
         break;
     };
     case OLED_OFF: oled_off(); break;

@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 #include "qmk_rc.h"
+#include <stdio.h>
+char wpm_str[10];
+char str[80];
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
@@ -45,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_DEL,   KC_1,   KC_2,    KC_3,     KC_4,     KC_5,                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  KC_MINS, \
   KC_TAB,   KC_Q,   KC_W,    KC_E,     KC_R,     KC_T,                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_EQUAL, \
   KC_ESC,   KC_A,   KC_S,    KC_D,     KC_F,     KC_G,                        KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN,  KC_QUOT, \
-  KC_LSFT,  KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,  KC_MUTE,     KC_MPLY,  KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ENT, \
+  KC_LSFT,  KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,  KC_MUTE,     KC_MPLY,  KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  RSFT_T(KC_ENT), \
                 KC_LOWER, KC_LGUI, KC_LALT, KC_LCTRL,  KC_SPC,      KC_BSPC,  KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT \
 ),
 /*
@@ -170,7 +173,15 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 //     oled_write_raw_P(my_logo, sizeof(my_logo));
 // }
 
-// static void print_status_narrow(void) {
+static void print_status_narrow(void) {
+    oled_set_cursor(0, 6);
+    oled_write_P(PSTR("     "), true);  
+    oled_write_P(PSTR(" WPM "), true);  
+      // edit the string to change wwhat shows up, edit %03d to change how many digits show up
+    sprintf(wpm_str, " %03d ", get_current_wpm());  // edit the string to change wwhat shows up, edit %03d to change how many digits show up
+    oled_write(wpm_str, true);  
+    oled_write_P(PSTR("     "), true);  
+
 //     // Print current mode
 //     oled_write_P(PSTR("\n\n"), false);
 //     oled_write_ln_P(PSTR("MODE"), false);
@@ -191,47 +202,52 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 //         default:
 //             oled_write_P(PSTR("Undef"), false);
 //     }
-//     oled_write_P(PSTR("\n\n"), false);
+    oled_write_P(PSTR("\n"), false);
 //     // Print current layer
+    led_t led_usb_state = host_keyboard_led_state();
+
 //     oled_write_ln_P(PSTR("LAYER"), false);
-//     switch (get_highest_layer(layer_state)) {
-//         case _DEBUG:
-//             oled_write_P(PSTR("DEBUG\n"), false);
-//             break;
-//         case _QWERTY:
-//             oled_write_P(PSTR("Base\n"), false);
-//             break;
-//         case _RAISE:
-//             oled_write_P(PSTR("Raise"), false);
-//             break;
-//         case _LOWER:
-//             oled_write_P(PSTR("Lower"), false);
-//             break;
-//         case _ADJUST:
-//             oled_write_P(PSTR("Adj\n"), false);
-//             break;
-//         default:
-//             oled_write_ln_P(PSTR("Undef"), false);
-//     }
-//     oled_write_P(PSTR("\n\n"), false);
-//     led_t led_usb_state = host_keyboard_led_state();
-//     oled_write_ln_P(PSTR("CPSLK"), led_usb_state.caps_lock);
-// }
+    switch (get_highest_layer(layer_state)) {
+        case _DEBUG:
+            oled_write_P(PSTR("DEBUG\n"), led_usb_state.caps_lock);
+            break;
+        case _QWERTY:
+            oled_write_P(PSTR("Sam\n"), led_usb_state.caps_lock);
+            break;
+        case _RAISE:
+            oled_write_P(PSTR("Raise"), led_usb_state.caps_lock);
+            break;
+        case _LOWER:
+            oled_write_P(PSTR("Funk\n"), led_usb_state.caps_lock);
+            break;
+        case _ADJUST:
+            oled_write_P(PSTR("Adj\n"), led_usb_state.caps_lock);
+            break;
+        default:
+            oled_write_ln_P(PSTR("Undef"), led_usb_state.caps_lock);
+    }
 
-// oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-//     if (is_keyboard_master()) {
-        // return OLED_ROTATION_270;
-//     }
-//     return rotation;
-// }
+    oled_write_P(PSTR("Henry\n"), false);
+    oled_write_P(PSTR("BNE\n"), false);
+    // oled_write_P(PSTR(".sh"), true);
+    // oled_write_P(str, true);
 
-// void oled_task_user(void) {
-//     print_status_narrow();
-// }
+    oled_set_cursor(0, 0);                         
+}
+
+oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+    return OLED_ROTATION_270;
+}
+
+void oled_task_user(void) {
+    print_status_narrow();
+}
 
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // sprintf(str, "%u", keycode);
+
     switch (keycode) {
         case KC_QWERTY:
             if (record->event.pressed) {
